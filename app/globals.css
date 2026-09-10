@@ -1,0 +1,185 @@
+:root {
+  --cp-primary: #1a3b5d;
+  --cp-accent: #c8963e;
+  --cp-bg: #f7f8fa;
+  --cp-text: #1c1c1c;
+  --cp-border: #e0e2e6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+a {
+  color: var(--cp-primary);
+}
+
+.cp-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.cp-header {
+  background: var(--cp-primary);
+  color: #fff;
+  padding: 16px 0;
+}
+
+.cp-header .cp-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.cp-header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.cp-brand {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.cp-nav a {
+  margin-left: 20px;
+  font-size: 14px;
+}
+
+.cp-card {
+  background: #fff;
+  border: 1px solid var(--cp-border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.cp-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--cp-accent);
+  color: #fff;
+  margin-right: 6px;
+}
+
+.cp-form label {
+  display: block;
+  margin: 12px 0 4px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cp-form input,
+.cp-form textarea,
+.cp-form select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--cp-border);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.cp-btn {
+  display: inline-block;
+  background: var(--cp-primary);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+.cp-btn.secondary {
+  background: #6b7280;
+}
+
+.cp-btn.danger {
+  background: #b91c1c;
+}
+
+.cp-footer {
+  border-top: 1px solid var(--cp-border);
+  padding: 24px 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.cp-doi {
+  font-family: monospace;
+  background: #f0f2f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.cp-published-actions {
+  margin-top: 12px;
+  border-top: 1px dashed var(--cp-border);
+  padding-top: 10px;
+}
+
+.cp-action-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.cp-btn-link {
+  background: none;
+  border: none;
+  color: var(--cp-primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+}
+
+.cp-inline-form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 420px;
+}
+
+.cp-inline-form input,
+.cp-inline-form textarea {
+  padding: 8px 10px;
+  border: 1px solid var(--cp-border);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.cp-inline-form button {
+  align-self: flex-start;
+  background: var(--cp-primary);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.cp-inline-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cp-hint {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 6px 0;
+}

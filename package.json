@@ -1,0 +1,23 @@
+{
+  "name": "changopreprint-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ChangoPreprint 独立前端 —— Next.js App Router，部署在 Vercel 免费额度上。只做页面渲染（含 SSR 落地页供 Google Scholar 抓取），业务数据全部来自独立 FastAPI 后端（changopreprint/backend，默认 8012），不与主站 madechango.com 共享任何账号或数据库。",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "16.3.4",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.1",
+    "typescript": "5.7.2"
+  }
+}
