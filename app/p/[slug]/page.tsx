@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { api, type LandingData } from "@/lib/api";
 import VersionHistory from "@/components/VersionHistory";
+import ViewTracker from "@/components/ViewTracker";
 import T from "@/components/T";
+import { metaDescription, scholarMetaToOther } from "@/lib/seo";
 
 // 服务端渲染 + 每篇预印本自己的 <meta name="citation_*"> 标签，这是整个
 // 免费方案里 Google Scholar 能收录的关键 —— Zenodo 官方不被 Scholar 系统
@@ -22,18 +24,28 @@ type PageProps = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const data = await fetchLanding(slug);
-  if (!data) return { title: "预印本不存在" };
+  if (!data) return { title: "预印本不存在", robots: { index: false, follow: false } };
 
   const title = data.preprint.title_en || data.preprint.title_zh;
-  const other: Record<string, string> = {};
-  for (const tag of data.scholar_meta) {
-    other[tag.name] = tag.content;
-  }
+  const description = metaDescription(data.preprint.abstract_en || data.preprint.abstract_zh || "");
+  const other = scholarMetaToOther(data.scholar_meta);
 
   return {
     title,
-    description: (data.preprint.abstract_en || data.preprint.abstract_zh || "").slice(0, 200),
+    description,
     alternates: { canonical: data.canonical_url },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url: data.canonical_url,
+      siteName: "ChangoPreprint",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
     other,
   };
 }
@@ -45,10 +57,18 @@ export default async function PreprintLandingPage({ params }: PageProps) {
 
   const { preprint, pdf_url, json_ld } = data;
   const title = preprint.title_en || preprint.title_zh;
-  const abstract = preprint.abstract_en || preprint.abstract_zh;
+  const altTitle =
+    preprint.title_zh && preprint.title_en && preprint.title_zh !== preprint.title_en
+      ? preprint.title_zh
+      : "";
+  const abstractEn = preprint.abstract_en || "";
+  const abstractZh = preprint.abstract_zh || "";
+  const primaryAbstract = abstractEn || abstractZh;
+  const secondaryAbstract = abstractEn && abstractZh && abstractZh !== abstractEn ? abstractZh : "";
 
   return (
     <article>
+      <ViewTracker slug={preprint.slug} />
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
@@ -65,8 +85,9 @@ export default async function PreprintLandingPage({ params }: PageProps) {
       )}
 
       {preprint.subject_area && <span className="cp-badge">{preprint.subject_area}</span>}
-      <h1>{title}</h1>
-      <p style={{ color: "#555" }}>
+      <h1 className="citation_title">{title}</h1>
+      {altTitle ? <p className="cp-alt-title">{altTitle}</p> : null}
+      <p className="citation_author" style={{ color: "#555" }}>
         {preprint.authors.map((a) => a.name).join(", ")}
       </p>
 
@@ -103,16 +124,29 @@ export default async function PreprintLandingPage({ params }: PageProps) {
           </p>
         )}
         {pdf_url && (
-          <a className="cp-btn" href={pdf_url} target="_blank" rel="noreferrer">
+          <a className="cp-btn" href={`/p/${preprint.slug}.pdf`}>
             <T k="landing_download_pdf" />
           </a>
         )}
       </div>
 
-      <h2>
-        <T k="landing_abstract_heading" />
-      </h2>
-      <p>{abstract}</p>
+      {primaryAbstract ? (
+        <>
+          <h2>
+            <T k={abstractEn ? "landing_abstract_en_heading" : "landing_abstract_heading"} />
+          </h2>
+          <p>{primaryAbstract}</p>
+        </>
+      ) : null}
+
+      {secondaryAbstract ? (
+        <>
+          <h2>
+            <T k="landing_abstract_zh_heading" />
+          </h2>
+          <p>{secondaryAbstract}</p>
+        </>
+      ) : null}
 
       {preprint.keywords.length > 0 && (
         <p>

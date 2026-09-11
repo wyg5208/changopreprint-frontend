@@ -3,8 +3,8 @@
 // 只对接独立 FastAPI 后端（NEXT_PUBLIC_API_BASE），不调用 madechango.com
 // 任何接口 —— 两个用户体系刻意不打通，本站不做主站登录态识别。
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8012/api/v1";
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+export { API_BASE, SITE_URL } from "./site";
+import { API_BASE } from "./site";
 
 export class ApiError extends Error {
   status: number;
@@ -113,7 +113,18 @@ export const api = {
     );
   },
   getLanding: (slug: string) =>
-    request<LandingData>(`/public/preprints/${slug}`, { cache: "no-store" } as RequestInit),
+    request<LandingData>(`/public/preprints/${slug}`, {
+      next: { revalidate: 60 },
+    } as RequestInit),
+  trackView: (slug: string) =>
+    request<void>(`/public/preprints/${encodeURIComponent(slug)}/view`, {
+      method: "POST",
+    }),
+  getSitemap: () =>
+    request<{
+      preprints: { slug: string; published_at: string | null; updated_at: string | null }[];
+      authors: string[];
+    }>("/public/sitemap", { next: { revalidate: 300 } } as RequestInit),
 
   // 管理端
   reviewQueue: (token: string) => request<PreprintSummary[]>("/admin/preprints/queue", { token }),
@@ -205,6 +216,7 @@ export type PreprintSummary = {
 export type LandingData = {
   preprint: PreprintSummary;
   pdf_url: string;
+  scholar_pdf_url?: string;
   scholar_meta: { name: string; content: string }[];
   json_ld: Record<string, unknown>;
   canonical_url: string;

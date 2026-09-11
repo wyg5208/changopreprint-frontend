@@ -11,9 +11,12 @@ export default function PreprintCard({ item }: { item: PreprintSummary }) {
   return (
     <div className="cp-card">
       {item.subject_area && <span className="cp-badge">{item.subject_area}</span>}
-      <h3>
+      <h3 className="citation_title">
         <Link href={`/p/${item.slug}`}>{title}</Link>
       </h3>
+      {item.title_zh && item.title_en && item.title_zh !== item.title_en ? (
+        <p className="cp-alt-title">{item.title_zh}</p>
+      ) : null}
       <p style={{ color: "#555", fontSize: 14 }}>
         {item.authors.map((a, idx) => (
           <span key={idx}>

@@ -1,15 +1,23 @@
 import { api } from "@/lib/api";
 import PreprintCard from "@/components/PreprintCard";
+import Pagination from "@/components/Pagination";
 import T from "@/components/T";
 
-export const revalidate = 60; // 首页浏览列表每分钟重新拉取一次，不需要实时
+export const revalidate = 60;
 
-export default async function HomePage() {
+const PAGE_SIZE = 20;
+
+type PageProps = { searchParams: Promise<{ page?: string }> };
+
+export default async function HomePage({ searchParams }: PageProps) {
+  const sp = await searchParams;
+  const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
+
   let data;
   try {
-    data = await api.browse({});
+    data = await api.browse({ page });
   } catch {
-    data = { total: 0, items: [] as Awaited<ReturnType<typeof api.browse>>["items"] };
+    data = { total: 0, page, page_size: PAGE_SIZE, items: [] as Awaited<ReturnType<typeof api.browse>>["items"] };
   }
 
   return (
@@ -28,6 +36,7 @@ export default async function HomePage() {
       {data.items.map((item) => (
         <PreprintCard key={item.slug} item={item} />
       ))}
+      <Pagination page={data.page || page} pageSize={data.page_size || PAGE_SIZE} total={data.total} />
     </div>
   );
 }

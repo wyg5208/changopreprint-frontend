@@ -36,6 +36,9 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     home_title: "最新预印本",
     home_desc: "未同行评审的学术预印本，发布后获得 Zenodo/DataCite 注册的可引用 DOI。",
     home_empty: "暂无已发布预印本。",
+    home_prev: "上一页",
+    home_next: "下一页",
+    home_page: "第 {page} / {pages} 页",
 
     // ---- 预印本卡片 / 统计 ----
     card_stats: "浏览 {views} · 下载 {downloads}",
@@ -190,6 +193,8 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     landing_official_publication_label: "正式发表：",
     landing_download_pdf: "下载 PDF",
     landing_abstract_heading: "摘要",
+    landing_abstract_en_heading: "Abstract",
+    landing_abstract_zh_heading: "摘要",
     landing_keywords_label: "关键词：",
     landing_archived_at: "归档于",
 
@@ -247,6 +252,9 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     home_desc:
       "Non-peer-reviewed academic preprints. Once published, each receives a citable DOI registered via Zenodo/DataCite.",
     home_empty: "No published preprints yet.",
+    home_prev: "Previous",
+    home_next: "Next",
+    home_page: "Page {page} of {pages}",
 
     card_stats: "{views} views · {downloads} downloads",
 
@@ -396,6 +404,8 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     landing_official_publication_label: "Formally Published: ",
     landing_download_pdf: "Download PDF",
     landing_abstract_heading: "Abstract",
+    landing_abstract_en_heading: "Abstract",
+    landing_abstract_zh_heading: "摘要",
     landing_keywords_label: "Keywords: ",
     landing_archived_at: "Archived at",
 
