@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import type { PreprintSummary } from "@/lib/api";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function PreprintCard({ item }: { item: PreprintSummary }) {
+  const { t } = useLanguage();
   const title = item.title_en || item.title_zh;
 
   return (
@@ -28,7 +32,7 @@ export default function PreprintCard({ item }: { item: PreprintSummary }) {
             DOI: <span className="cp-doi">{item.version_doi}</span> ·{" "}
           </>
         )}
-        浏览 {item.view_count} · 下载 {item.download_count}
+        {t("card_stats", { views: item.view_count, downloads: item.download_count })}
       </p>
     </div>
   );

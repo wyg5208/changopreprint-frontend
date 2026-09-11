@@ -6,9 +6,11 @@ import { api, ApiError, type PreprintSummary } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import PendingVersionsQueue from "@/components/PendingVersionsQueue";
 import UserVerificationQueue from "@/components/UserVerificationQueue";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function AdminReviewPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [token, setToken] = useState<string | null>(null);
   const [queue, setQueue] = useState<PreprintSummary[]>([]);
   const [error, setError] = useState("");
@@ -24,13 +26,13 @@ export default function AdminReviewPage() {
   }
 
   useEffect(() => {
-    const t = getToken();
-    if (!t) {
+    const tk = getToken();
+    if (!tk) {
       router.push("/login");
       return;
     }
-    setToken(t);
-    reload(t);
+    setToken(tk);
+    reload(tk);
   }, [router]);
 
   async function handleApprove(slug: string) {
@@ -41,7 +43,7 @@ export default function AdminReviewPage() {
       await api.approve(token, slug);
       await reload(token);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "发布失败");
+      setError(err instanceof ApiError ? err.message : t("admin_publish_error"));
     } finally {
       setBusySlug(null);
     }
@@ -49,7 +51,7 @@ export default function AdminReviewPage() {
 
   async function handleReject(slug: string) {
     if (!token) return;
-    const reason = window.prompt("请填写拒绝理由");
+    const reason = window.prompt(t("admin_reject_reason_prompt"));
     if (!reason) return;
     setBusySlug(slug);
     setError("");
@@ -57,7 +59,7 @@ export default function AdminReviewPage() {
       await api.reject(token, slug, reason);
       await reload(token);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "操作失败");
+      setError(err instanceof ApiError ? err.message : t("admin_action_error"));
     } finally {
       setBusySlug(null);
     }
@@ -67,12 +69,10 @@ export default function AdminReviewPage() {
     <div>
       {token && <UserVerificationQueue token={token} />}
 
-      <h1>审核队列</h1>
-      <p style={{ fontSize: 13, color: "#888" }}>
-        通过后会自动创建 Zenodo deposition、上传 PDF 并发布，注册正式 DOI。
-      </p>
+      <h1>{t("admin_queue_title")}</h1>
+      <p style={{ fontSize: 13, color: "#888" }}>{t("admin_queue_desc")}</p>
       {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
-      {queue.length === 0 && <p>队列为空。</p>}
+      {queue.length === 0 && <p>{t("admin_queue_empty")}</p>}
       {queue.map((item) => (
         <div className="cp-card" key={item.slug}>
           <h3>{item.title_zh || item.title_en}</h3>
@@ -85,14 +85,14 @@ export default function AdminReviewPage() {
             disabled={busySlug === item.slug}
             onClick={() => handleApprove(item.slug)}
           >
-            {busySlug === item.slug ? "处理中…" : "通过并发布到 Zenodo"}
+            {busySlug === item.slug ? t("admin_processing") : t("admin_approve_publish_button")}
           </button>{" "}
           <button
             className="cp-btn danger"
             disabled={busySlug === item.slug}
             onClick={() => handleReject(item.slug)}
           >
-            拒绝
+            {t("admin_reject_button")}
           </button>
         </div>
       ))}

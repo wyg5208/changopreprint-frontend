@@ -4,10 +4,12 @@
 // 对应后端 GET /admin/preprints/pending-versions + POST .../publish-version。
 import { useEffect, useState } from "react";
 import { api, ApiError, type PreprintSummary, type PreprintVersionInfo } from "@/lib/api";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 type PendingItem = PreprintSummary & { pending_version: PreprintVersionInfo };
 
 export default function PendingVersionsQueue({ token }: { token: string }) {
+  const { t } = useLanguage();
   const [items, setItems] = useState<PendingItem[]>([]);
   const [error, setError] = useState("");
   const [busySlug, setBusySlug] = useState<string | null>(null);
@@ -17,12 +19,13 @@ export default function PendingVersionsQueue({ token }: { token: string }) {
       const res = await api.pendingVersions(token);
       setItems(res as PendingItem[]);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "加载新版本队列失败");
+      setError(err instanceof ApiError ? err.message : t("pending_versions_error"));
     }
   }
 
   useEffect(() => {
     reload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   async function handlePublish(slug: string) {
@@ -32,7 +35,7 @@ export default function PendingVersionsQueue({ token }: { token: string }) {
       await api.publishVersion(token, slug);
       await reload();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "发布新版本失败");
+      setError(err instanceof ApiError ? err.message : t("admin_publish_error"));
     } finally {
       setBusySlug(null);
     }
@@ -42,22 +45,30 @@ export default function PendingVersionsQueue({ token }: { token: string }) {
 
   return (
     <div>
-      <h2>新版本待发布</h2>
+      <h2>{t("pending_versions_heading")}</h2>
       {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
       {items.map((item) => (
         <div className="cp-card" key={item.slug}>
           <h3>{item.title_zh || item.title_en}</h3>
           <p style={{ fontSize: 13, color: "#555" }}>
-            slug: {item.slug} · 待发布第 {item.pending_version.version_no} 版 ·{" "}
-            {item.pending_version.original_filename}
+            {t("pending_versions_line", {
+              slug: item.slug,
+              n: item.pending_version.version_no,
+              filename: item.pending_version.original_filename,
+            })}
           </p>
-          {item.pending_version.changelog && <p>修订说明：{item.pending_version.changelog}</p>}
+          {item.pending_version.changelog && (
+            <p>
+              {t("pending_versions_changelog_label")}
+              {item.pending_version.changelog}
+            </p>
+          )}
           <button
             className="cp-btn"
             disabled={busySlug === item.slug}
             onClick={() => handlePublish(item.slug)}
           >
-            {busySlug === item.slug ? "处理中…" : "发布该新版本到 Zenodo"}
+            {busySlug === item.slug ? t("admin_processing") : t("pending_versions_publish_button")}
           </button>
         </div>
       ))}

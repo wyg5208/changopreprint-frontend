@@ -54,7 +54,15 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
-  me: (token: string) => request("/auth/me", { token }),
+  me: (token: string) => request<UserOut>("/auth/me", { token }),
+  updateProfile: (token: string, payload: Record<string, unknown>) =>
+    request<UserOut>("/auth/me", { method: "PUT", token, body: JSON.stringify(payload) }),
+  changePassword: (token: string, oldPassword: string, newPassword: string) =>
+    request("/auth/change-password", {
+      method: "POST",
+      token,
+      body: JSON.stringify({ old_password: oldPassword, new_password: newPassword }),
+    }),
 
   createDraft: (token: string, payload: Record<string, unknown>) =>
     request("/preprints/", { method: "POST", token, body: JSON.stringify(payload) }),
@@ -131,6 +139,19 @@ export const api = {
     ),
   publishVersion: (token: string, slug: string) =>
     request(`/admin/preprints/${slug}/publish-version`, { method: "POST", token }),
+};
+
+export type UserOut = {
+  id: number;
+  email: string;
+  full_name: string;
+  university: string;
+  student_type: string;
+  orcid: string;
+  academic_email: string;
+  verification_status: string;
+  is_admin: boolean;
+  can_submit: boolean;
 };
 
 export type PreprintAuthor = {

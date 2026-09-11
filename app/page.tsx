@@ -1,5 +1,6 @@
 import { api } from "@/lib/api";
 import PreprintCard from "@/components/PreprintCard";
+import T from "@/components/T";
 
 export const revalidate = 60; // 首页浏览列表每分钟重新拉取一次，不需要实时
 
@@ -13,11 +14,17 @@ export default async function HomePage() {
 
   return (
     <div>
-      <h1>最新预印本</h1>
+      <h1>
+        <T k="home_title" />
+      </h1>
       <p style={{ color: "#555" }}>
-        未同行评审的学术预印本，发布后获得 Zenodo/DataCite 注册的可引用 DOI。
+        <T k="home_desc" />
       </p>
-      {data.items.length === 0 && <p>暂无已发布预印本。</p>}
+      {data.items.length === 0 && (
+        <p>
+          <T k="home_empty" />
+        </p>
+      )}
       {data.items.map((item) => (
         <PreprintCard key={item.slug} item={item} />
       ))}

@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
 import { saveToken } from "@/lib/auth";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,7 +23,7 @@ export default function LoginPage() {
       saveToken(res.access_token);
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "登录失败");
+      setError(err instanceof ApiError ? err.message : t("login_error_default"));
     } finally {
       setLoading(false);
     }
@@ -29,14 +31,12 @@ export default function LoginPage() {
 
   return (
     <div className="cp-card cp-form" style={{ maxWidth: 420, margin: "0 auto" }}>
-      <h1>登录 ChangoPreprint</h1>
-      <p style={{ fontSize: 13, color: "#888" }}>
-        本站账号为学术实名体系，与 MadeChango 社区账号完全独立。
-      </p>
+      <h1>{t("login_title")}</h1>
+      <p style={{ fontSize: 13, color: "#888" }}>{t("login_desc")}</p>
       <form onSubmit={handleSubmit}>
-        <label>邮箱</label>
+        <label>{t("login_email_label")}</label>
         <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        <label>密码</label>
+        <label>{t("login_password_label")}</label>
         <input
           type="password"
           required
@@ -45,7 +45,7 @@ export default function LoginPage() {
         />
         {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
         <button className="cp-btn" type="submit" disabled={loading}>
-          {loading ? "登录中…" : "登录"}
+          {loading ? t("login_submit_loading") : t("login_submit")}
         </button>
       </form>
     </div>

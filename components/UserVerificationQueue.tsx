@@ -6,6 +6,7 @@
 // 这是当前唯一能把新用户从 pending 转为 approved 的入口。
 import { useEffect, useState } from "react";
 import { api, ApiError } from "@/lib/api";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 type PendingUser = {
   id: number;
@@ -22,6 +23,7 @@ type PendingUser = {
 };
 
 export default function UserVerificationQueue({ token }: { token: string }) {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<PendingUser[]>([]);
   const [error, setError] = useState("");
   const [busyId, setBusyId] = useState<number | null>(null);
@@ -31,12 +33,13 @@ export default function UserVerificationQueue({ token }: { token: string }) {
       const res = await api.pendingUsers(token);
       setUsers(res as PendingUser[]);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "加载用户实名审核队列失败");
+      setError(err instanceof ApiError ? err.message : t("admin_user_review_error"));
     }
   }
 
   useEffect(() => {
     reload();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   async function handleApprove(userId: number) {
@@ -46,21 +49,21 @@ export default function UserVerificationQueue({ token }: { token: string }) {
       await api.verifyUser(token, userId, true);
       await reload();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "审核通过失败");
+      setError(err instanceof ApiError ? err.message : t("admin_user_approve_error"));
     } finally {
       setBusyId(null);
     }
   }
 
   async function handleReject(userId: number) {
-    const note = window.prompt("请填写拒绝理由（可选）") || "";
+    const note = window.prompt(t("admin_reject_prompt")) || "";
     setBusyId(userId);
     setError("");
     try {
       await api.verifyUser(token, userId, false, note);
       await reload();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "操作失败");
+      setError(err instanceof ApiError ? err.message : t("admin_user_action_error"));
     } finally {
       setBusyId(null);
     }
@@ -68,35 +71,41 @@ export default function UserVerificationQueue({ token }: { token: string }) {
 
   return (
     <div>
-      <h2>用户实名审核</h2>
-      <p style={{ fontSize: 13, color: "#888" }}>
-        通过后该用户才能投稿（can_submit），拒绝不会删除账号，可随时重新审核。
-      </p>
+      <h2>{t("admin_user_review_heading")}</h2>
+      <p style={{ fontSize: 13, color: "#888" }}>{t("admin_user_review_desc")}</p>
       {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
-      {users.length === 0 && !error && <p>暂无待审核用户。</p>}
+      {users.length === 0 && !error && <p>{t("admin_user_review_empty")}</p>}
       {users.map((u) => (
         <div className="cp-card" key={u.id}>
-          <h3>{u.full_name || "（未填写姓名）"}</h3>
+          <h3>{u.full_name || t("admin_field_unnamed")}</h3>
           <p style={{ fontSize: 13, color: "#555" }}>
-            邮箱：{u.email} · 学校：{u.university || "-"} · 身份：{u.student_type || "-"}
+            {t("admin_field_email")}
+            {u.email} · {t("admin_field_university")}
+            {u.university || "-"} · {t("admin_field_identity")}
+            {u.student_type || "-"}
           </p>
           <p style={{ fontSize: 13, color: "#555" }}>
-            ORCID：{u.orcid || "-"} · 学术邮箱：{u.academic_email || "-"}
+            {t("admin_field_orcid")}
+            {u.orcid || "-"} · {t("admin_field_academic_email")}
+            {u.academic_email || "-"}
           </p>
-          <p style={{ fontSize: 12, color: "#999" }}>注册时间：{u.created_at || "-"}</p>
+          <p style={{ fontSize: 12, color: "#999" }}>
+            {t("admin_field_registered_at")}
+            {u.created_at || "-"}
+          </p>
           <button
             className="cp-btn"
             disabled={busyId === u.id}
             onClick={() => handleApprove(u.id)}
           >
-            {busyId === u.id ? "处理中…" : "通过实名审核"}
+            {busyId === u.id ? t("admin_processing") : t("admin_approve_user_button")}
           </button>{" "}
           <button
             className="cp-btn danger"
             disabled={busyId === u.id}
             onClick={() => handleReject(u.id)}
           >
-            拒绝
+            {t("admin_reject_button")}
           </button>
         </div>
       ))}

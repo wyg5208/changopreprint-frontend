@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { api, type LandingData } from "@/lib/api";
 import VersionHistory from "@/components/VersionHistory";
+import T from "@/components/T";
 
 // 服务端渲染 + 每篇预印本自己的 <meta name="citation_*"> 标签，这是整个
 // 免费方案里 Google Scholar 能收录的关键 —— Zenodo 官方不被 Scholar 系统
@@ -56,7 +57,9 @@ export default async function PreprintLandingPage({ params }: PageProps) {
 
       {preprint.status === "withdrawn" && (
         <div className="cp-card" style={{ borderColor: "#b91c1c", background: "#fef2f2" }}>
-          <strong>本预印本已被作者撤稿。</strong>
+          <strong>
+            <T k="landing_withdrawn_notice" />
+          </strong>
           {preprint.withdrawal_note && <p>{preprint.withdrawal_note}</p>}
         </div>
       )}
@@ -80,16 +83,20 @@ export default async function PreprintLandingPage({ params }: PageProps) {
               {preprint.version_doi}
             </a>
           ) : (
-            "发布中"
+            <T k="landing_publishing" />
           )}
         </p>
         <p>
-          <strong>许可证：</strong>
+          <strong>
+            <T k="landing_license_label" />
+          </strong>
           {preprint.license.toUpperCase()}
         </p>
         {preprint.journal_doi && (
           <p>
-            <strong>正式发表：</strong>
+            <strong>
+              <T k="landing_official_publication_label" />
+            </strong>
             <a href={`https://doi.org/${preprint.journal_doi}`} target="_blank" rel="noreferrer">
               {preprint.journal_doi}
             </a>
@@ -97,17 +104,21 @@ export default async function PreprintLandingPage({ params }: PageProps) {
         )}
         {pdf_url && (
           <a className="cp-btn" href={pdf_url} target="_blank" rel="noreferrer">
-            下载 PDF
+            <T k="landing_download_pdf" />
           </a>
         )}
       </div>
 
-      <h2>摘要</h2>
+      <h2>
+        <T k="landing_abstract_heading" />
+      </h2>
       <p>{abstract}</p>
 
       {preprint.keywords.length > 0 && (
         <p>
-          <strong>关键词：</strong>
+          <strong>
+            <T k="landing_keywords_label" />
+          </strong>
           {preprint.keywords.join(" · ")}
         </p>
       )}
@@ -115,7 +126,11 @@ export default async function PreprintLandingPage({ params }: PageProps) {
       <VersionHistory versions={preprint.versions} conceptDoi={preprint.concept_doi} />
 
       <p style={{ fontSize: 13, color: "#888" }}>
-        浏览 {preprint.view_count} · 下载 {preprint.download_count} · 归档于{" "}
+        <T
+          k="card_stats"
+          vars={{ views: preprint.view_count, downloads: preprint.download_count }}
+        />{" "}
+        · <T k="landing_archived_at" />{" "}
         <a href="https://zenodo.org" target="_blank" rel="noreferrer">
           Zenodo
         </a>

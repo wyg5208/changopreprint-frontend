@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -32,7 +34,7 @@ export default function RegisterPage() {
       setDone(true);
       setTimeout(() => router.push("/login"), 1500);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "注册失败");
+      setError(err instanceof ApiError ? err.message : t("register_error_default"));
     } finally {
       setLoading(false);
     }
@@ -41,31 +43,25 @@ export default function RegisterPage() {
   if (done) {
     return (
       <div className="cp-card">
-        <h1>注册成功</h1>
-        <p>
-          您的实名资料已提交，需等待管理员审核通过（
-          <strong>verification_status: pending</strong>）后才能投稿。
-          即将跳转到登录页…
-        </p>
+        <h1>{t("register_success_title")}</h1>
+        <p>{t("register_success_body")}</p>
       </div>
     );
   }
 
   return (
     <div className="cp-card cp-form" style={{ maxWidth: 480, margin: "0 auto" }}>
-      <h1>注册 ChangoPreprint 账号</h1>
-      <p style={{ fontSize: 13, color: "#888" }}>
-        投稿需要学术实名审核：请填写法定姓名与所属高校，建议补充 ORCID。
-      </p>
+      <h1>{t("register_title")}</h1>
+      <p style={{ fontSize: 13, color: "#888" }}>{t("register_desc")}</p>
       <form onSubmit={handleSubmit}>
-        <label>邮箱 *</label>
+        <label>{t("register_email_label")}</label>
         <input
           type="email"
           required
           value={form.email}
           onChange={(e) => update("email", e.target.value)}
         />
-        <label>密码 *（至少 8 位）</label>
+        <label>{t("register_password_label")}</label>
         <input
           type="password"
           required
@@ -73,35 +69,35 @@ export default function RegisterPage() {
           value={form.password}
           onChange={(e) => update("password", e.target.value)}
         />
-        <label>法定姓名 *</label>
+        <label>{t("register_fullname_label")}</label>
         <input
           required
           value={form.full_name}
           onChange={(e) => update("full_name", e.target.value)}
         />
-        <label>所属高校 *</label>
+        <label>{t("register_university_label")}</label>
         <input
           required
-          placeholder="例如：马来亚大学"
+          placeholder={t("register_university_placeholder")}
           value={form.university}
           onChange={(e) => update("university", e.target.value)}
         />
-        <label>身份</label>
+        <label>{t("register_student_type_label")}</label>
         <select value={form.student_type} onChange={(e) => update("student_type", e.target.value)}>
-          <option value="">请选择</option>
-          <option value="本科生">本科生</option>
-          <option value="硕士生">硕士生</option>
-          <option value="博士生">博士生</option>
-          <option value="教职工">教职工</option>
-          <option value="其它">其它</option>
+          <option value="">{t("register_student_type_placeholder")}</option>
+          <option value="本科生">{t("register_student_type_undergrad")}</option>
+          <option value="硕士生">{t("register_student_type_master")}</option>
+          <option value="博士生">{t("register_student_type_phd")}</option>
+          <option value="教职工">{t("register_student_type_faculty")}</option>
+          <option value="其它">{t("register_student_type_other")}</option>
         </select>
-        <label>ORCID（建议填写）</label>
+        <label>{t("register_orcid_label")}</label>
         <input
           placeholder="0000-0000-0000-0000"
           value={form.orcid}
           onChange={(e) => update("orcid", e.target.value)}
         />
-        <label>学校邮箱（便于人工核验身份）</label>
+        <label>{t("register_academic_email_label")}</label>
         <input
           type="email"
           value={form.academic_email}
@@ -109,7 +105,7 @@ export default function RegisterPage() {
         />
         {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
         <button className="cp-btn" type="submit" disabled={loading}>
-          {loading ? "提交中…" : "提交注册"}
+          {loading ? t("register_submit_loading") : t("register_submit")}
         </button>
       </form>
     </div>

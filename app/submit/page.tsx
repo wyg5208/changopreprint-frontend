@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
 import { getToken } from "@/lib/auth";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 type AuthorForm = { name: string; affiliation: string; orcid: string; is_corresponding: boolean };
 
@@ -16,6 +17,7 @@ const emptyAuthor = (): AuthorForm => ({
 
 export default function SubmitPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [token, setToken] = useState<string | null>(null);
   const [step, setStep] = useState<"meta" | "file" | "done">("meta");
   const [slug, setSlug] = useState<string | null>(null);
@@ -58,7 +60,7 @@ export default function SubmitPage() {
       setSlug(res.slug);
       setStep("file");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "创建草稿失败");
+      setError(err instanceof ApiError ? err.message : t("submit_error_create_draft"));
     } finally {
       setLoading(false);
     }
@@ -73,7 +75,7 @@ export default function SubmitPage() {
       await api.submitForReview(token, slug);
       setStep("done");
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "上传/提交失败");
+      setError(err instanceof ApiError ? err.message : t("submit_error_upload"));
     } finally {
       setLoading(false);
     }
@@ -84,13 +86,14 @@ export default function SubmitPage() {
   if (step === "done") {
     return (
       <div className="cp-card">
-        <h1>已提交审核</h1>
+        <h1>{t("submit_done_title")}</h1>
         <p>
-          稿件 <code>{slug}</code> 已进入审核队列。管理员通过后会自动发布到 Zenodo 并生成 DOI，
-          可在「我的稿件」页面查看进度。
+          {t("submit_done_body_before")}
+          <code>{slug}</code>
+          {t("submit_done_body_after")}
         </p>
         <a className="cp-btn" href="/dashboard">
-          查看我的稿件
+          {t("view_my_submissions_button")}
         </a>
       </div>
     );
@@ -98,82 +101,82 @@ export default function SubmitPage() {
 
   return (
     <div>
-      <h1>投稿 ChangoPreprint</h1>
+      <h1>{t("submit_title")}</h1>
       {step === "meta" && (
         <form className="cp-card cp-form" onSubmit={handleCreateDraft}>
-          <label>中文标题</label>
+          <label>{t("submit_title_zh_label")}</label>
           <input
             value={meta.title_zh}
             onChange={(e) => setMeta({ ...meta, title_zh: e.target.value })}
           />
-          <label>英文标题</label>
+          <label>{t("submit_title_en_label")}</label>
           <input
             value={meta.title_en}
             onChange={(e) => setMeta({ ...meta, title_en: e.target.value })}
           />
-          <p style={{ fontSize: 13, color: "#888" }}>中英文标题至少填一个</p>
+          <p style={{ fontSize: 13, color: "#888" }}>{t("submit_title_hint")}</p>
 
-          <label>中文摘要</label>
+          <label>{t("submit_abstract_zh_label")}</label>
           <textarea
             rows={4}
             value={meta.abstract_zh}
             onChange={(e) => setMeta({ ...meta, abstract_zh: e.target.value })}
           />
-          <label>英文摘要</label>
+          <label>{t("submit_abstract_en_label")}</label>
           <textarea
             rows={4}
             value={meta.abstract_en}
             onChange={(e) => setMeta({ ...meta, abstract_en: e.target.value })}
           />
 
-          <label>语言</label>
+          <label>{t("submit_language_label")}</label>
           <select
             value={meta.language}
             onChange={(e) => setMeta({ ...meta, language: e.target.value })}
           >
-            <option value="zh">中文</option>
-            <option value="en">英文</option>
-            <option value="bilingual">中英双语</option>
+            <option value="zh">{t("submit_language_zh")}</option>
+            <option value="en">{t("submit_language_en")}</option>
+            <option value="bilingual">{t("submit_language_bilingual")}</option>
           </select>
 
-          <label>学科领域</label>
+          <label>{t("submit_subject_label")}</label>
           <input
-            placeholder="例如：教育学 / Computer Science"
+            placeholder={t("submit_subject_placeholder")}
             value={meta.subject_area}
             onChange={(e) => setMeta({ ...meta, subject_area: e.target.value })}
           />
 
-          <label>关键词（逗号分隔）</label>
+          <label>{t("submit_keywords_label")}</label>
           <input
             value={meta.keywords}
             onChange={(e) => setMeta({ ...meta, keywords: e.target.value })}
           />
 
-          <label>许可证</label>
+          <label>{t("submit_license_label")}</label>
           <select
             value={meta.license}
             onChange={(e) => setMeta({ ...meta, license: e.target.value })}
           >
-            <option value="cc-by-4.0">CC BY 4.0（默认，推荐）</option>
-            <option value="cc-by-sa-4.0">CC BY-SA 4.0</option>
-            <option value="cc-by-nc-4.0">CC BY-NC 4.0</option>
+            <option value="cc-by-4.0">{t("license_cc_by")}</option>
+            <option value="cc-by-sa-4.0">{t("license_cc_by_sa")}</option>
+            <option value="cc-by-nc-4.0">{t("license_cc_by_nc")}</option>
           </select>
 
-          <h3 style={{ marginTop: 24 }}>作者</h3>
+          <h3 style={{ marginTop: 24 }}>{t("submit_authors_heading")}</h3>
           {authors.map((a, idx) => (
             <div key={idx} className="cp-card" style={{ background: "#fafafa" }}>
-              <label>姓名 *</label>
+              <label>{t("author_name_label")}</label>
               <input
                 required
                 value={a.name}
                 onChange={(e) => updateAuthor(idx, { name: e.target.value })}
               />
-              <label>单位</label>
+              <label>{t("author_affiliation_label")}</label>
               <input
                 value={a.affiliation}
                 onChange={(e) => updateAuthor(idx, { affiliation: e.target.value })}
               />
-              <label>ORCID</label>
+              <label>{t("author_orcid_label")}</label>
               <input
                 value={a.orcid}
                 onChange={(e) => updateAuthor(idx, { orcid: e.target.value })}
@@ -185,7 +188,7 @@ export default function SubmitPage() {
                   onChange={(e) => updateAuthor(idx, { is_corresponding: e.target.checked })}
                   style={{ width: "auto", marginRight: 6 }}
                 />
-                通讯作者
+                {t("author_corresponding_label")}
               </label>
             </div>
           ))}
@@ -194,13 +197,13 @@ export default function SubmitPage() {
             className="cp-btn secondary"
             onClick={() => setAuthors([...authors, emptyAuthor()])}
           >
-            + 添加作者
+            {t("add_author_button")}
           </button>
 
           {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
           <div>
             <button className="cp-btn" type="submit" disabled={loading}>
-              {loading ? "创建中…" : "下一步：上传 PDF"}
+              {loading ? t("create_draft_loading") : t("create_draft_button")}
             </button>
           </div>
         </form>
@@ -208,7 +211,7 @@ export default function SubmitPage() {
 
       {step === "file" && (
         <div className="cp-card cp-form">
-          <h3>上传预印本 PDF 主文件</h3>
+          <h3>{t("upload_pdf_heading")}</h3>
           <input
             type="file"
             accept="application/pdf"
@@ -220,7 +223,7 @@ export default function SubmitPage() {
             disabled={!file || loading}
             onClick={handleUploadAndSubmit}
           >
-            {loading ? "上传中…" : "上传并提交审核"}
+            {loading ? t("upload_submit_loading") : t("upload_submit_button")}
           </button>
         </div>
       )}

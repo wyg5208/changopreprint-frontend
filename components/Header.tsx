@@ -1,6 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import LanguageToggle from "./LanguageToggle";
+import UserMenu from "./UserMenu";
 
 export default function Header() {
+  const { t } = useLanguage();
+
   return (
     <header className="cp-header">
       <div className="cp-container">
@@ -8,10 +15,10 @@ export default function Header() {
           ChangoPreprint
         </Link>
         <nav className="cp-nav">
-          <Link href="/">浏览</Link>
-          <Link href="/submit">投稿</Link>
-          <Link href="/login">登录</Link>
-          <Link href="/register">注册</Link>
+          <Link href="/">{t("nav_browse")}</Link>
+          <Link href="/submit">{t("nav_submit")}</Link>
+          <UserMenu />
+          <LanguageToggle />
         </nav>
       </div>
     </header>

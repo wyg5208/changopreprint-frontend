@@ -5,20 +5,22 @@ import { useRouter } from "next/navigation";
 import { api, type PreprintSummary } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import PublishedActions from "@/components/PublishedActions";
-
-const STATUS_LABEL: Record<string, string> = {
-  draft: "草稿",
-  submitted: "已提交，待审核",
-  under_review: "发布中（正在同步 Zenodo）",
-  published: "已发布",
-  rejected: "已拒绝",
-  withdrawn: "已撤稿",
-};
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [items, setItems] = useState<PreprintSummary[]>([]);
   const [error, setError] = useState("");
+
+  const STATUS_LABEL: Record<string, string> = {
+    draft: t("status_draft"),
+    submitted: t("status_submitted"),
+    under_review: t("status_under_review"),
+    published: t("status_published"),
+    rejected: t("status_rejected"),
+    withdrawn: t("status_withdrawn"),
+  };
 
   useEffect(() => {
     const token = getToken();
@@ -29,14 +31,21 @@ export default function DashboardPage() {
     api
       .listMine(token)
       .then((res) => setItems(res as PreprintSummary[]))
-      .catch(() => setError("加载失败，请重新登录"));
+      .catch(() => setError(t("dashboard_error")));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   return (
     <div>
-      <h1>我的稿件</h1>
+      <h1>{t("dashboard_title")}</h1>
       {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
-      {items.length === 0 && <p>暂无稿件，去 <a href="/submit">投稿</a> 吧。</p>}
+      {items.length === 0 && (
+        <p>
+          {t("dashboard_empty_before")}
+          <a href="/submit">{t("dashboard_empty_link")}</a>
+          {t("dashboard_empty_after")}
+        </p>
+      )}
       {items.map((item) => (
         <div className="cp-card" key={item.slug}>
           <span className="cp-badge">{STATUS_LABEL[item.status] || item.status}</span>
@@ -47,7 +56,7 @@ export default function DashboardPage() {
             </p>
           )}
           {(item.status === "published" || item.status === "withdrawn") && (
-            <a href={`/p/${item.slug}`}>查看落地页</a>
+            <a href={`/p/${item.slug}`}>{t("dashboard_view_landing")}</a>
           )}
           <PublishedActions
             item={item}
