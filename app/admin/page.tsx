@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { api, ApiError, type PreprintSummary } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import PendingVersionsQueue from "@/components/PendingVersionsQueue";
+import UserVerificationQueue from "@/components/UserVerificationQueue";
 
 export default function AdminReviewPage() {
   const router = useRouter();
@@ -64,6 +65,8 @@ export default function AdminReviewPage() {
 
   return (
     <div>
+      {token && <UserVerificationQueue token={token} />}
+
       <h1>审核队列</h1>
       <p style={{ fontSize: 13, color: "#888" }}>
         通过后会自动创建 Zenodo deposition、上传 PDF 并发布，注册正式 DOI。
