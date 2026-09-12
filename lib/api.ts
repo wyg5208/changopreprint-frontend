@@ -243,6 +243,7 @@ export type ShowcaseItem = {
   source_name: string;
   source_url: string;
   title: string;
+  title_zh: string;
   abstract: string;
   authors: string[];
   subject_area: string;

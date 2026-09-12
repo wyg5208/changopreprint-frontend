@@ -27,6 +27,7 @@ export default function ShowcaseCard({
       </div>
       {!compact && item.subject_area && <span className="cp-badge">{item.subject_area}</span>}
       <h3 className="cp-showcase-title">{item.title}</h3>
+      {item.title_zh && <p className="cp-alt-title">{item.title_zh}</p>}
       {authors.length > 0 && (
         <p style={{ color: "#555", fontSize: 14 }}>
           {authors.join(", ")}
