@@ -13,7 +13,7 @@ export type Locale = "zh" | "en";
 export const dictionaries: Record<Locale, Record<string, string>> = {
   zh: {
     // ---- 顶部导航 ----
-    nav_browse: "浏览",
+    nav_browse: "首页",
     nav_showcase: "学术资讯",
     nav_submit: "投稿",
     nav_login: "登录",
@@ -273,7 +273,7 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
   },
 
   en: {
-    nav_browse: "Browse",
+    nav_browse: "Home",
     nav_showcase: "Academic News",
     nav_submit: "Submit",
     nav_login: "Log in",
