@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { api } from "@/lib/api";
 import PreprintCard from "@/components/PreprintCard";
 import Pagination from "@/components/Pagination";
@@ -31,6 +32,10 @@ export default async function HomePage({ searchParams }: PageProps) {
       {data.items.length === 0 && (
         <p>
           <T k="home_empty" />
+          <br />
+          <Link href="/showcase" className="cp-home-showcase-teaser">
+            <T k="nav_showcase" /> →
+          </Link>
         </p>
       )}
       {data.items.map((item) => (

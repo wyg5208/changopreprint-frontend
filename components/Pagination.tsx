@@ -4,15 +4,17 @@ export default function Pagination({
   page,
   pageSize,
   total,
+  basePath = "/",
 }: {
   page: number;
   pageSize: number;
   total: number;
+  basePath?: string;
 }) {
   const pages = Math.max(1, Math.ceil(total / pageSize));
   if (pages <= 1) return null;
 
-  const hrefFor = (n: number) => (n <= 1 ? "/" : `/?page=${n}`);
+  const hrefFor = (n: number) => (n <= 1 ? basePath : `${basePath}?page=${n}`);
 
   return (
     <nav className="cp-pagination" aria-label="pagination">

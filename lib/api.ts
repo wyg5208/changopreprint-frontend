@@ -126,6 +126,19 @@ export const api = {
       authors: string[];
     }>("/public/sitemap", { next: { revalidate: 300 } } as RequestInit),
 
+  // 精选外部预印本（"学术资讯"栏目）：来自 arXiv/SSRN/bioRxiv 等平台的公开
+  // 元数据展示，不是本站投稿，见后端 models/external_showcase.py 说明。
+  showcase: (params: { page?: number; page_size?: number } = {}) => {
+    const search = new URLSearchParams();
+    if (params.page) search.set("page", String(params.page));
+    if (params.page_size) search.set("page_size", String(params.page_size));
+    const qs = search.toString();
+    return request<{ total: number; page: number; page_size: number; items: ShowcaseItem[] }>(
+      `/public/showcase${qs ? `?${qs}` : ""}`,
+      { next: { revalidate: 300 } } as RequestInit
+    );
+  },
+
   // 管理端
   reviewQueue: (token: string) => request<PreprintSummary[]>("/admin/preprints/queue", { token }),
   approve: (token: string, slug: string) =>
@@ -211,6 +224,19 @@ export type PreprintSummary = {
   download_count: number;
   published_at: string | null;
   created_at: string;
+};
+
+export type ShowcaseItem = {
+  id: number;
+  source: string;
+  source_name: string;
+  source_url: string;
+  title: string;
+  abstract: string;
+  authors: string[];
+  subject_area: string;
+  external_doi: string;
+  published_at: string | null;
 };
 
 export type LandingData = {

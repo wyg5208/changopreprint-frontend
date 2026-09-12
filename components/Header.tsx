@@ -16,6 +16,7 @@ export default function Header() {
         </Link>
         <nav className="cp-nav">
           <Link href="/">{t("nav_browse")}</Link>
+          <Link href="/showcase">{t("nav_showcase")}</Link>
           <Link href="/submit">{t("nav_submit")}</Link>
           <UserMenu />
           <LanguageToggle />

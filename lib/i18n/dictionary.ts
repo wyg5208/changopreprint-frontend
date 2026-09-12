@@ -14,6 +14,7 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
   zh: {
     // ---- 顶部导航 ----
     nav_browse: "浏览",
+    nav_showcase: "学术资讯",
     nav_submit: "投稿",
     nav_login: "登录",
     nav_register: "注册",
@@ -42,6 +43,15 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
 
     // ---- 预印本卡片 / 统计 ----
     card_stats: "浏览 {views} · 下载 {downloads}",
+
+    // ---- 学术资讯（精选外部预印本） ----
+    showcase_title: "学术资讯",
+    showcase_desc:
+      "精选来自 arXiv、SSRN、bioRxiv 等主流预印本平台的最新学术资讯，均转载自原平台公开信息，非本站投稿，不代表本站已收录或已授予 DOI，点击「阅读原文」查看完整内容。",
+    showcase_empty: "暂无资讯，请稍后再来。",
+    showcase_source_prefix: "转自 {source}",
+    showcase_read_original: "阅读原文",
+    showcase_authors_more: "等",
 
     // ---- 登录页 ----
     login_title: "登录 ChangoPreprint",
@@ -229,6 +239,7 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
 
   en: {
     nav_browse: "Browse",
+    nav_showcase: "Academic News",
     nav_submit: "Submit",
     nav_login: "Log in",
     nav_register: "Register",
@@ -257,6 +268,15 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     home_page: "Page {page} of {pages}",
 
     card_stats: "{views} views · {downloads} downloads",
+
+    // ---- Academic News (curated external preprints) ----
+    showcase_title: "Academic News",
+    showcase_desc:
+      "Curated academic news from major preprint platforms such as arXiv, SSRN, and bioRxiv. Reposted from the original platforms' public information; these are not submissions to this site and are not indexed or assigned a DOI here. Click \"Read Original\" for the full content.",
+    showcase_empty: "No news yet, please check back later.",
+    showcase_source_prefix: "Reposted from {source}",
+    showcase_read_original: "Read Original",
+    showcase_authors_more: "et al.",
 
     login_title: "Log in to ChangoPreprint",
     login_desc:
