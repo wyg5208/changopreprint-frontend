@@ -33,7 +33,42 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     footer_p4:
       "本站账号为学术实名体系，与 MadeChango 社区账号（madechango.com）完全独立，两边不共享登录、不共享数据。",
 
-    // ---- 首页 ----
+    // ---- 首页 Hero ----
+    hero_title: "为马来西亚中国留学生打造的开放学术预印本平台",
+    hero_subtitle: "快速获得永久可引用 DOI，抢占学术优先权，让你的研究成果被更早看到、更早引用。",
+    hero_search_placeholder: "搜索标题、摘要或关键词…",
+    hero_search_button: "搜索",
+    hero_cta_submit: "立即投稿",
+    hero_cta_showcase: "浏览学术资讯",
+
+    // ---- 首页统计条 ----
+    stats_published_label: "本站原创已发布预印本",
+    stats_showcase_label: "学术资讯精选（来自 {n} 个平台）",
+    stats_doi_value: "永久归档",
+    stats_doi_label: "DOI 由 Zenodo/DataCite 注册",
+    stats_free_value: "0 元",
+    stats_free_label: "完全免费，无版面费",
+
+    // ---- 首页：学术资讯预览 ----
+    home_news_heading: "学术资讯",
+    home_news_more: "查看全部",
+
+    // ---- 首页：搜索结果 ----
+    home_search_result_prefix: "搜索 “{q}” 的结果",
+    home_search_clear: "清除搜索",
+
+    // ---- 首页：为什么投稿 ----
+    benefits_heading: "为什么选择 ChangoPreprint",
+    benefit_doi_title: "极速获得永久DOI",
+    benefit_doi_desc: "审核通过后自动发布到 Zenodo，几分钟内获得可永久引用的 DOI，无需等待期刊排队。",
+    benefit_priority_title: "抢占学术优先权",
+    benefit_priority_desc: "带时间戳的公开记录，第一时间证明你的想法和成果，避免被他人抢先发表。",
+    benefit_cite_title: "方便引用与传播",
+    benefit_cite_desc: "标准化元数据 + 可引用 DOI，方便同行检索、引用，并支持关联后续正式期刊发表。",
+    benefit_free_title: "完全免费・门槛低",
+    benefit_free_desc: "面向马来西亚中国留学生完全免费开放，无版面费，本科生、硕博生、教职工均可投稿。",
+
+    // ---- 首页：最新预印本 ----
     home_title: "最新预印本",
     home_desc: "未同行评审的学术预印本，发布后获得 Zenodo/DataCite 注册的可引用 DOI。",
     home_empty: "暂无已发布预印本。",
@@ -259,6 +294,47 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     footer_p4:
       "This site uses a real-name academic account system, completely independent from the MadeChango community account (madechango.com); the two do not share login or data.",
 
+    // ---- Homepage Hero ----
+    hero_title: "An Open Academic Preprint Platform for Malaysian Chinese International Students",
+    hero_subtitle:
+      "Get a permanent, citable DOI fast, claim academic priority, and get your research seen and cited sooner.",
+    hero_search_placeholder: "Search titles, abstracts, or keywords…",
+    hero_search_button: "Search",
+    hero_cta_submit: "Submit Now",
+    hero_cta_showcase: "Browse Academic News",
+
+    // ---- Homepage stats strip ----
+    stats_published_label: "Original Preprints Published Here",
+    stats_showcase_label: "Curated News (from {n} platforms)",
+    stats_doi_value: "Permanently Archived",
+    stats_doi_label: "DOIs registered via Zenodo/DataCite",
+    stats_free_value: "$0",
+    stats_free_label: "Completely free, no publication fees",
+
+    // ---- Homepage: academic news preview ----
+    home_news_heading: "Academic News",
+    home_news_more: "View All",
+
+    // ---- Homepage: search results ----
+    home_search_result_prefix: "Search results for “{q}”",
+    home_search_clear: "Clear search",
+
+    // ---- Homepage: why submit ----
+    benefits_heading: "Why Choose ChangoPreprint",
+    benefit_doi_title: "Fast, Permanent DOI",
+    benefit_doi_desc:
+      "Automatically published to Zenodo once approved — get a permanently citable DOI within minutes, no journal queue.",
+    benefit_priority_title: "Claim Academic Priority",
+    benefit_priority_desc:
+      "A timestamped public record proves your ideas and results were first, protecting you from being scooped.",
+    benefit_cite_title: "Easy to Cite & Share",
+    benefit_cite_desc:
+      "Standardized metadata plus a citable DOI make it easy for peers to find and cite your work, and to later link a formal journal publication.",
+    benefit_free_title: "Free & Low Barrier",
+    benefit_free_desc:
+      "Completely free for Malaysian Chinese international students — no publication fees. Open to undergrads, graduate students, and faculty alike.",
+
+    // ---- Homepage: latest preprints ----
     home_title: "Latest Preprints",
     home_desc:
       "Non-peer-reviewed academic preprints. Once published, each receives a citable DOI registered via Zenodo/DataCite.",

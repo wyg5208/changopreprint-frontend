@@ -101,6 +101,9 @@ export const api = {
     return request(`/preprints/${slug}/versions${qs}`, { method: "POST", token, body: form });
   },
 
+  stats: () =>
+    request<PlatformStats>("/public/stats", { next: { revalidate: 60 } } as RequestInit),
+
   browse: (params: { q?: string; subject_area?: string; author?: string; page?: number } = {}) => {
     const search = new URLSearchParams();
     if (params.q) search.set("q", params.q);
@@ -224,6 +227,14 @@ export type PreprintSummary = {
   download_count: number;
   published_at: string | null;
   created_at: string;
+};
+
+export type PlatformStats = {
+  published_count: number;
+  total_views: number;
+  total_downloads: number;
+  showcase_count: number;
+  showcase_source_count: number;
 };
 
 export type ShowcaseItem = {

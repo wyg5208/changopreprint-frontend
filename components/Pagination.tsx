@@ -5,16 +5,23 @@ export default function Pagination({
   pageSize,
   total,
   basePath = "/",
+  extraParams,
 }: {
   page: number;
   pageSize: number;
   total: number;
   basePath?: string;
+  extraParams?: Record<string, string>;
 }) {
   const pages = Math.max(1, Math.ceil(total / pageSize));
   if (pages <= 1) return null;
 
-  const hrefFor = (n: number) => (n <= 1 ? basePath : `${basePath}?page=${n}`);
+  const hrefFor = (n: number) => {
+    const search = new URLSearchParams(extraParams);
+    if (n > 1) search.set("page", String(n));
+    const qs = search.toString();
+    return qs ? `${basePath}?${qs}` : basePath;
+  };
 
   return (
     <nav className="cp-pagination" aria-label="pagination">

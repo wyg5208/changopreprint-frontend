@@ -7,17 +7,25 @@
 import type { ShowcaseItem } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
-export default function ShowcaseCard({ item }: { item: ShowcaseItem }) {
+export default function ShowcaseCard({
+  item,
+  compact = false,
+}: {
+  item: ShowcaseItem;
+  compact?: boolean;
+}) {
   const { t } = useLanguage();
-  const authors = item.authors.slice(0, 4);
-  const hasMoreAuthors = item.authors.length > 4;
+  const authorLimit = compact ? 2 : 4;
+  const authors = item.authors.slice(0, authorLimit);
+  const hasMoreAuthors = item.authors.length > authorLimit;
+  const abstractLimit = compact ? 110 : 220;
 
   return (
-    <div className="cp-card cp-showcase-card">
+    <div className={`cp-card cp-showcase-card${compact ? " compact" : ""}`}>
       <div className="cp-showcase-source">
         {t("showcase_source_prefix", { source: item.source_name || "OpenAlex" })}
       </div>
-      {item.subject_area && <span className="cp-badge">{item.subject_area}</span>}
+      {!compact && item.subject_area && <span className="cp-badge">{item.subject_area}</span>}
       <h3 className="cp-showcase-title">{item.title}</h3>
       {authors.length > 0 && (
         <p style={{ color: "#555", fontSize: 14 }}>
@@ -27,12 +35,12 @@ export default function ShowcaseCard({ item }: { item: ShowcaseItem }) {
       )}
       {item.abstract && (
         <p style={{ fontSize: 14 }}>
-          {item.abstract.slice(0, 220)}
-          {item.abstract.length > 220 ? "…" : ""}
+          {item.abstract.slice(0, abstractLimit)}
+          {item.abstract.length > abstractLimit ? "…" : ""}
         </p>
       )}
       <p style={{ fontSize: 13, color: "#888" }}>
-        {item.external_doi && (
+        {!compact && item.external_doi && (
           <>
             DOI: <span className="cp-doi">{item.external_doi}</span> ·{" "}
           </>
