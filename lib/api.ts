@@ -153,6 +153,19 @@ export const api = {
       body: JSON.stringify({ reason }),
     }),
   pendingUsers: (token: string) => request("/admin/users/pending", { token }),
+  listUsers: (token: string, verificationStatus = "") => {
+    const qs = verificationStatus
+      ? `?verification_status=${encodeURIComponent(verificationStatus)}`
+      : "";
+    return request<AdminUser[]>(`/admin/users${qs}`, { token });
+  },
+  setUserActive: (token: string, userId: number, isActive: boolean) =>
+    request<AdminUser>(`/admin/users/${userId}/active`, {
+      method: "PATCH",
+      token,
+      body: JSON.stringify({ is_active: isActive }),
+    }),
+  adminStats: (token: string) => request<AdminStats>("/admin/stats", { token }),
   verifyUser: (token: string, userId: number, approve: boolean, note = "") =>
     request(`/admin/users/${userId}/verify`, {
       method: "POST",
@@ -178,7 +191,20 @@ export type UserOut = {
   academic_email: string;
   verification_status: string;
   is_admin: boolean;
+  is_active?: boolean;
   can_submit: boolean;
+  created_at?: string | null;
+};
+
+export type AdminUser = UserOut & {
+  is_active: boolean;
+};
+
+export type AdminStats = {
+  pending_users: number;
+  pending_preprints: number;
+  pending_versions: number;
+  pending_total: number;
 };
 
 export type PreprintAuthor = {

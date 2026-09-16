@@ -21,6 +21,11 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     nav_dashboard: "我的稿件",
     nav_profile: "编辑资料",
     nav_logout: "退出登录",
+    nav_admin: "管理后台",
+    nav_admin_users: "用户审批与管理",
+    nav_admin_users_hint: "实名审核、停用账号",
+    nav_admin_papers: "稿件审核",
+    nav_admin_papers_hint: "通过发布 / 拒绝投稿",
 
     // ---- 页脚 ----
     footer_p1_before: "ChangoPreprint 是面向马来西亚中国留学生的预印本服务器，",
@@ -197,7 +202,21 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     published_upload_failed: "上传失败",
     published_version_uploaded_success: "新版本已上传，等待管理员审核发布到 Zenodo",
 
-    // ---- 管理后台：用户实名审核 ----
+    // ---- 管理后台：Dashboard ----
+    admin_dashboard_kicker: "Administrator",
+    admin_dashboard_title: "管理后台",
+    admin_dashboard_desc: "审批用户实名资料、管理账号状态，以及审核作者提交的预印本。",
+    admin_users_title: "用户审批与管理",
+    admin_users_desc: "通过实名审核后该用户才能投稿；停用账号会立即禁止登录与投稿，不会删除历史稿件。",
+    admin_users_empty: "没有符合筛选条件的用户。",
+    admin_filter_pending: "待审核",
+    admin_filter_all: "全部",
+    admin_filter_approved: "已通过",
+    admin_filter_rejected: "已拒绝",
+    admin_user_disabled: "已停用",
+    admin_user_is_admin: "管理员",
+    admin_disable_user: "停用账号",
+    admin_enable_user: "恢复账号",
     admin_user_review_heading: "用户实名审核",
     admin_user_review_desc: "通过后该用户才能投稿（can_submit），拒绝不会删除账号，可随时重新审核。",
     admin_user_review_empty: "暂无待审核用户。",
@@ -288,6 +307,11 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     nav_dashboard: "My Submissions",
     nav_profile: "Edit Profile",
     nav_logout: "Log Out",
+    nav_admin: "Dashboard",
+    nav_admin_users: "Users",
+    nav_admin_users_hint: "Verify identity, disable accounts",
+    nav_admin_papers: "Submissions",
+    nav_admin_papers_hint: "Approve or reject preprints",
 
     footer_p1_before:
       "ChangoPreprint is a preprint server for Malaysian Chinese international students; it is ",
@@ -471,6 +495,22 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     published_version_uploaded_success:
       "New version uploaded, pending admin review for Zenodo publication",
 
+    admin_dashboard_kicker: "Administrator",
+    admin_dashboard_title: "Admin Dashboard",
+    admin_dashboard_desc:
+      "Verify user identities, manage account status, and review preprint submissions.",
+    admin_users_title: "Users",
+    admin_users_desc:
+      "Users can only submit after identity verification. Disabling an account immediately blocks login and submissions; existing preprints are kept.",
+    admin_users_empty: "No users match this filter.",
+    admin_filter_pending: "Pending",
+    admin_filter_all: "All",
+    admin_filter_approved: "Approved",
+    admin_filter_rejected: "Rejected",
+    admin_user_disabled: "Disabled",
+    admin_user_is_admin: "Admin",
+    admin_disable_user: "Disable",
+    admin_enable_user: "Re-enable",
     admin_user_review_heading: "User Identity Verification",
     admin_user_review_desc:
       "Once approved, the user can submit preprints (can_submit). Rejecting does not delete the account and can be re-reviewed anytime.",

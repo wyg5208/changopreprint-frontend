@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import LanguageToggle from "./LanguageToggle";
 import UserMenu from "./UserMenu";
+import AdminNav from "./AdminNav";
 
 export default function Header() {
   const { t } = useLanguage();
@@ -18,6 +19,7 @@ export default function Header() {
           <Link href="/">{t("nav_browse")}</Link>
           <Link href="/showcase">{t("nav_showcase")}</Link>
           <Link href="/submit">{t("nav_submit")}</Link>
+          <AdminNav />
           <UserMenu />
           <LanguageToggle />
         </nav>
