@@ -194,9 +194,11 @@ export default function SubmitPage() {
 
           <label>{t("submit_keywords_label")}</label>
           <input
+            placeholder={t("submit_keywords_placeholder")}
             value={meta.keywords}
             onChange={(e) => setMeta({ ...meta, keywords: e.target.value })}
           />
+          <p style={{ fontSize: 13, color: "#888" }}>{t("submit_keywords_hint")}</p>
 
           <label>{t("submit_license_label")}</label>
           <select

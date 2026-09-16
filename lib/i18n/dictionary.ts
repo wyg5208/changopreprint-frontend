@@ -139,7 +139,9 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     submit_subject_secondary_hint: "次领域需与主领域不同",
     submit_error_subject_required: "请选择主领域",
     submit_error_subject_secondary_duplicate: "次领域不能与主领域相同",
-    submit_keywords_label: "关键词（逗号分隔）",
+    submit_keywords_label: "关键词",
+    submit_keywords_placeholder: "例如：机器学习，深度学习；神经网络",
+    submit_keywords_hint: "支持中英文逗号、分号混用，可以直接从别处复制粘贴，不用手动改格式",
     submit_license_label: "许可证",
     license_cc_by: "CC BY 4.0（默认，推荐）",
     license_cc_by_sa: "CC BY-SA 4.0",
@@ -410,7 +412,10 @@ export const dictionaries: Record<Locale, Record<string, string>> = {
     submit_error_subject_required: "Please select a primary subject area",
     submit_error_subject_secondary_duplicate:
       "The secondary subject area cannot be the same as the primary one",
-    submit_keywords_label: "Keywords (comma separated)",
+    submit_keywords_label: "Keywords",
+    submit_keywords_placeholder: "e.g. machine learning, deep learning; neural networks",
+    submit_keywords_hint:
+      "Commas or semicolons (half- or full-width) all work — paste from elsewhere without reformatting",
     submit_license_label: "License",
     license_cc_by: "CC BY 4.0 (default, recommended)",
     license_cc_by_sa: "CC BY-SA 4.0",
