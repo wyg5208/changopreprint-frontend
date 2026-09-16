@@ -4,6 +4,7 @@ import { api, type LandingData } from "@/lib/api";
 import VersionHistory from "@/components/VersionHistory";
 import ViewTracker from "@/components/ViewTracker";
 import T from "@/components/T";
+import SubjectBadge from "@/components/SubjectBadge";
 import { metaDescription, scholarMetaToOther } from "@/lib/seo";
 
 // 服务端渲染 + 每篇预印本自己的 <meta name="citation_*"> 标签，这是整个
@@ -84,7 +85,7 @@ export default async function PreprintLandingPage({ params }: PageProps) {
         </div>
       )}
 
-      {preprint.subject_area && <span className="cp-badge">{preprint.subject_area}</span>}
+      <SubjectBadge primary={preprint.subject_area} secondary={preprint.subject_area_secondary} />
       <h1 className="citation_title">{title}</h1>
       {altTitle ? <p className="cp-alt-title">{altTitle}</p> : null}
       <p className="citation_author" style={{ color: "#555" }}>

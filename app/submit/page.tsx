@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { SUBJECT_AREAS, subjectAreaLabel } from "@/lib/subjectAreas";
 
 type AuthorForm = { name: string; affiliation: string; orcid: string; is_corresponding: boolean };
 
@@ -17,7 +18,7 @@ const emptyAuthor = (): AuthorForm => ({
 
 export default function SubmitPage() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [token, setToken] = useState<string | null>(null);
   const [step, setStep] = useState<"meta" | "file" | "done">("meta");
   const [slug, setSlug] = useState<string | null>(null);
@@ -31,6 +32,7 @@ export default function SubmitPage() {
     abstract_en: "",
     language: "zh",
     subject_area: "",
+    subject_area_secondary: "",
     keywords: "",
     license: "cc-by-4.0",
   });
@@ -54,6 +56,17 @@ export default function SubmitPage() {
     e.preventDefault();
     if (!token) return;
     setError("");
+    // 主领域必填、次领域若填写必须与主领域不同——下拉框选项本身已经是
+    // 受控词表，这里只是兜底再校验一次（防止后端返回422前给出更快的
+    // 中文/英文提示），后端 schemas/preprint.py 仍会做同样的校验。
+    if (!meta.subject_area) {
+      setError(t("submit_error_subject_required"));
+      return;
+    }
+    if (meta.subject_area_secondary && meta.subject_area_secondary === meta.subject_area) {
+      setError(t("submit_error_subject_secondary_duplicate"));
+      return;
+    }
     setLoading(true);
     try {
       const res = (await api.createDraft(token, { ...meta, authors })) as { slug: string };
@@ -139,12 +152,45 @@ export default function SubmitPage() {
             <option value="bilingual">{t("submit_language_bilingual")}</option>
           </select>
 
-          <label>{t("submit_subject_label")}</label>
-          <input
-            placeholder={t("submit_subject_placeholder")}
+          <label>{t("submit_subject_primary_label")}</label>
+          <select
+            required
             value={meta.subject_area}
-            onChange={(e) => setMeta({ ...meta, subject_area: e.target.value })}
-          />
+            onChange={(e) => {
+              const next = e.target.value;
+              setMeta((prev) => ({
+                ...prev,
+                subject_area: next,
+                // 主领域一变，之前选的次领域如果撞车了就顺手清空，避免
+                // 用户没注意到又直接提交触发"次领域不能与主领域相同"报错。
+                subject_area_secondary:
+                  prev.subject_area_secondary === next ? "" : prev.subject_area_secondary,
+              }));
+            }}
+          >
+            <option value="" disabled>
+              {t("submit_subject_select_placeholder")}
+            </option>
+            {SUBJECT_AREAS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {subjectAreaLabel(opt.value, locale)}
+              </option>
+            ))}
+          </select>
+
+          <label>{t("submit_subject_secondary_label")}</label>
+          <select
+            value={meta.subject_area_secondary}
+            onChange={(e) => setMeta({ ...meta, subject_area_secondary: e.target.value })}
+          >
+            <option value="">{t("submit_subject_secondary_none_option")}</option>
+            {SUBJECT_AREAS.filter((opt) => opt.value !== meta.subject_area).map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {subjectAreaLabel(opt.value, locale)}
+              </option>
+            ))}
+          </select>
+          <p style={{ fontSize: 13, color: "#888" }}>{t("submit_subject_secondary_hint")}</p>
 
           <label>{t("submit_keywords_label")}</label>
           <input

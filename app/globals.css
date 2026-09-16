@@ -175,6 +175,12 @@ a {
   margin-right: 6px;
 }
 
+/* 次领域标签：视觉上比主领域弱一档，避免和主领域抢注意力 */
+.cp-badge.secondary {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
 .cp-form label {
   display: block;
   margin: 12px 0 4px;

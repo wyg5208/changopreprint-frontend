@@ -6,6 +6,7 @@ import { api, ApiError, type PreprintSummary } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import PendingVersionsQueue from "@/components/PendingVersionsQueue";
 import UserVerificationQueue from "@/components/UserVerificationQueue";
+import SubjectBadge from "@/components/SubjectBadge";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function AdminReviewPage() {
@@ -75,6 +76,7 @@ export default function AdminReviewPage() {
       {queue.length === 0 && <p>{t("admin_queue_empty")}</p>}
       {queue.map((item) => (
         <div className="cp-card" key={item.slug}>
+          <SubjectBadge primary={item.subject_area} secondary={item.subject_area_secondary} />
           <h3>{item.title_zh || item.title_en}</h3>
           <p style={{ fontSize: 13, color: "#555" }}>
             {item.authors.map((a) => a.name).join(", ")} · slug: {item.slug}

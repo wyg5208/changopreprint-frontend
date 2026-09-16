@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { PreprintSummary } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import SubjectBadge from "@/components/SubjectBadge";
 
 export default function PreprintCard({ item }: { item: PreprintSummary }) {
   const { t } = useLanguage();
@@ -10,7 +11,7 @@ export default function PreprintCard({ item }: { item: PreprintSummary }) {
 
   return (
     <div className="cp-card">
-      {item.subject_area && <span className="cp-badge">{item.subject_area}</span>}
+      <SubjectBadge primary={item.subject_area} secondary={item.subject_area_secondary} />
       <h3 className="citation_title">
         <Link href={`/p/${item.slug}`}>{title}</Link>
       </h3>

@@ -212,6 +212,7 @@ export type PreprintSummary = {
   abstract_en: string;
   language: string;
   subject_area: string;
+  subject_area_secondary: string;
   keywords: string[];
   license: string;
   status: string;
